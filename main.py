@@ -6,8 +6,9 @@ bot_token = '6101196560:AAE9Te6XfIfldcJcqdnh6Yb7SHPVi_z3hRc'
 # Replace 'GROUP_ID' with the ID of the group where the bot will save the chats
 log_group_id = '-1001832126466'
 
-# Create a TeleBot instance
+# Create a SingleInstanceBot instance
 bot = telebot.TeleBot(bot_token)
+bot = telebot.SingleInstanceBot(bot)
 
 # Register a message handler for all incoming messages in any group
 @bot.message_handler(func=lambda message: True)
