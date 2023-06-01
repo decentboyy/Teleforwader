@@ -1,4 +1,5 @@
 import telebot
+import fcntl
 
 # Replace 'TOKEN' with your bot token
 bot_token = '6101196560:AAE9Te6XfIfldcJcqdnh6Yb7SHPVi_z3hRc'
@@ -6,9 +7,12 @@ bot_token = '6101196560:AAE9Te6XfIfldcJcqdnh6Yb7SHPVi_z3hRc'
 # Replace 'GROUP_ID' with the ID of the group where the bot will save the chats
 log_group_id = '-1001832126466'
 
-# Create a SingleInstanceBot instance
+# Create a TeleBot instance
 bot = telebot.TeleBot(bot_token)
-bot = telebot.SingleInstanceBot(bot)
+
+# Obtain a file lock
+lock_file = open("bot.lock", "w")
+fcntl.flock(lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
 
 # Register a message handler for all incoming messages in any group
 @bot.message_handler(func=lambda message: True)
@@ -34,3 +38,7 @@ def save_chat(message):
 
 # Start the bot
 bot.polling()
+
+# Release the file lock
+fcntl.flock(lock_file, fcntl.LOCK_UN)
+lock_file.close()
